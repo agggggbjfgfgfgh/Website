@@ -7,8 +7,8 @@
 <style>
   body {
     font-family: 'Arial', sans-serif;
-    background-color: #222;
-    color: #fff;
+    background-color: #1e1e2f;
+    color: #ecf0f1;
     margin: 0;
     padding: 20px;
     text-align: center;
@@ -16,40 +16,39 @@
 
   h1 {
     font-size: 3em;
-    margin-bottom: 10px;
+    margin-bottom: 0.2em;
     color: #f39c12;
   }
 
   #quote {
     font-style: italic;
-    margin-bottom: 20px;
+    font-size: 1.2em;
+    margin-bottom: 1em;
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
-    font-size: 1.3em;
-    color: #ecf0f1;
+    padding: 0 10px;
   }
 
   #balance {
-    font-size: 24px;
-    margin-bottom: 20px;
+    font-size: 1.5em;
+    margin-bottom: 1em;
   }
 
-  /* Game selection buttons */
+  /* Button styles */
   .game-buttons {
-    margin-bottom: 30px;
+    margin-bottom: 2em;
   }
-
   button {
     background: linear-gradient(to right, #f7971e, #ffd200);
     border: none;
     padding: 12px 24px;
     margin: 8px;
-    font-size: 16px;
+    font-size: 1em;
     border-radius: 8px;
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    transition: all 0.3s;
+    transition: all 0.2s ease;
   }
   button:hover {
     transform: scale(1.05);
@@ -57,17 +56,16 @@
   }
 
   #game-area {
-    margin-top: 30px;
+    margin-top: 2em;
   }
 
-  /* Roulette Styles */
+  /* Roulette styles */
   #roulette-container {
     position: relative;
     width: 400px;
     height: 400px;
-    margin: 0 auto;
+    margin: 0 auto 2em auto;
   }
-
   #roulette {
     width: 100%;
     height: 100%;
@@ -82,7 +80,6 @@
       #e74c3c 300deg 360deg
     );
     position: relative;
-    transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
   }
 
   #pointer {
@@ -90,8 +87,7 @@
     top: -20px;
     left: 50%;
     transform: translateX(-50%);
-    width: 0; 
-    height: 0; 
+    width: 0; height: 0;
     border-left: 20px solid transparent;
     border-right: 20px solid transparent;
     border-bottom: 20px solid #fff;
@@ -106,12 +102,13 @@
     border-radius: 50%;
     top: 50%;
     left: 50%;
-    margin-top: -200px; /* radius of circle */
-    margin-left: -10px; /* center horizontally */
-    transform-origin: bottom center;
-    transition: all 4s cubic-bezier(0.33, 1, 0.68, 1);
+    margin-top: -200px; /* radius */
+    margin-left: -10px;
+    transform: translate(0, 0);
+    transition: none; /* No movement needed */
   }
 
+  /* Fixed on red, no movement */
   /* Coin flip styles */
   #coin {
     width: 200px;
@@ -123,10 +120,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 2em;
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    transition: transform 0.6s ease;
+    transition: transform 0.8s ease;
+    perspective: 1000px;
   }
 
   #coin.flip {
@@ -138,7 +136,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 20px auto;
+    margin-top: 1em;
   }
 
   .reel {
@@ -148,36 +146,33 @@
     border: 4px solid #fff;
     border-radius: 8px;
     background-color: #34495e;
-    font-size: 36px;
+    font-size: 2.5em;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Arial', sans-serif;
-    color: #ecf0f1;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
   }
 
   #spin-btn {
     padding: 12px 24px;
-    font-size: 18px;
+    font-size: 1.2em;
     background: linear-gradient(to right, #f7971e, #ffd200);
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    margin-top: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    margin-top: 1em;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   }
-
   #spin-btn:hover {
-    background: linear-gradient(to right, #f2994a, #ffc107);
     transform: scale(1.05);
+    background: linear-gradient(to right, #f2994a, #ffc107);
   }
 
   /* Result display */
   #result {
-    margin-top: 25px;
-    font-size: 20px;
-    min-height: 24px;
+    margin-top: 2em;
+    font-size: 1.3em;
+    min-height: 1.5em;
   }
 </style>
 </head>
@@ -191,6 +186,8 @@
   <button onclick="showGame('roulette')">Roulette</button>
   <button onclick="showGame('coin')">Coin Flip</button>
   <button onclick="showGame('slot')">Slot Machine</button>
+  <button onclick="showGame('dice')">Dice Roll</button>
+  <button onclick="showGame('blackjack')">Blackjack</button>
 </div>
 
 <div id="game-area">
@@ -221,6 +218,18 @@
     <button id="spin-btn" onclick="spinSlot()">Spin Slots</button>
   </div>
 
+  <!-- Dice Roll -->
+  <div id="dice-area" style="display:none;">
+    <button onclick="rollDice()">Roll Dice</button>
+    <div id="dice-result" style="margin-top:1em; font-size:2em;"></div>
+  </div>
+
+  <!-- Blackjack -->
+  <div id="blackjack-area" style="display:none;">
+    <button onclick="startBlackjack()">Start Blackjack</button>
+    <div id="blackjack-game" style="margin-top:1em;"></div>
+  </div>
+
 </div>
 
 <div id="result"></div>
@@ -242,12 +251,19 @@
   const winSound = document.getElementById('winSound');
   const loseSound = document.getElementById('loseSound');
 
-  let currentBetColor = 'red'; // default
+  let currentGame = 'roulette';
 
   function showGame(game) {
-    document.getElementById('roulette-area').style.display = game==='roulette'?'block':'none';
-    document.getElementById('coin-area').style.display = game==='coin'?'block':'none';
-    document.getElementById('slot-area').style.display = game==='slot'?'block':'none';
+    document.querySelectorAll('#game-area > div').forEach(div => div.style.display='none');
+    document.getElementById(game + '-area').style.display='block';
+    currentGame=game;
+    resetResults();
+  }
+
+  function resetResults() {
+    document.querySelector('#dice-result').innerText='';
+    document.getElementById('blackjack-game') && (document.getElementById('blackjack-game').innerHTML='');
+    document.getElementById('result').innerText='';
   }
 
   function updateBalance() {
@@ -255,169 +271,154 @@
   }
 
   function getBet() {
-    const bet = prompt("Enter your bet amount:", "10");
-    const betAmount = parseInt(bet);
-    if (isNaN(betAmount) || betAmount <= 0 || betAmount > balance) {
-      alert("Invalid bet!");
+    const betStr = prompt("Enter your bet amount:", "10");
+    const bet = parseInt(betStr);
+    if (isNaN(bet) || bet <= 0 || bet > balance) {
+      alert('Invalid bet.');
       return null;
     }
-    return betAmount;
+    return bet;
   }
 
-  // -------- Roulette --------
+  // -------- Roulette ----------
   function spinRoulette() {
     const betAmount = 10; // fixed for demo
     if (betAmount > balance) {
       alert('Not enough funds!');
       return;
     }
-
-    // For demo, always bet on red
-    currentBetColor = 'red';
+    // Bet on red always
+    const betColor='red';
 
     // Spin wheel
-    const spins = Math.floor(Math.random() * 3 + 3); // 3-5 spins
+    const spins = Math.floor(Math.random() * 3 + 3);
     const spinDeg = Math.floor(Math.random() * 360);
     const totalDeg = 360 * spins + spinDeg;
+    roulette.style.transition='transform 4s cubic-bezier(0.33, 1, 0.68, 1)';
+    roulette.style.transform=`rotate(${totalDeg}deg)`;
 
-    // Reset transition
-    roulette.style.transition = 'transform 4s cubic-bezier(0.33, 1, 0.68, 1)';
-    roulette.style.transform = `rotate(${totalDeg}deg)`;
-
-    // Animate the ball movement
+    // Animate ball (fixed position)
     animateBall(spinDeg, totalDeg);
 
-    // After spin
     setTimeout(() => {
-      const finalDeg = totalDeg % 360;
-      const sector = getSector(finalDeg);
-      let win = false;
-      let payout = 0;
-      if (sector === currentBetColor) {
+      const finalDeg=totalDeg%360;
+      const sector=getSector(finalDeg);
+      let win=false;
+      let payout=0;
+      if (sector===betColor) {
         win=true;
-        payout=20; // payout
+        payout=20;
       }
       if (win) {
-        balance += payout - betAmount;
+        balance+=payout - betAmount;
         resultDiv.innerText=`Landed on ${sector}. You won $${payout}!`;
         winSound.play();
       } else {
-        balance -= betAmount;
+        balance-=betAmount;
         resultDiv.innerText=`Landed on ${sector}. You lost $${betAmount}.`;
         loseSound.play();
       }
       updateBalance();
-      // Reset ball position after delay
-      setTimeout(() => { ball.style.transform = `translate(0,0)`; }, 500);
     }, 4200);
   }
 
   function animateBall(startDeg, totalDeg) {
-    const duration = 4000; // same as wheel
-    const startTime = performance.now();
+    const duration=4000;
+    const startTime=performance.now();
 
     function animate(currentTime) {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const currentDeg = startDeg + (totalDeg - startDeg) * progress;
-
-      const radius = 180; // circle radius
-      const radians = (currentDeg * Math.PI) / 180;
-      const x = Math.cos(radians) * radius;
-      const y = Math.sin(radians) * radius;
-
-      ball.style.transform = `translate(${x}px, ${y}px)`;
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
+      const elapsed=currentTime-startTime;
+      const progress=Math.min(elapsed/duration,1);
+      const currentDeg=startDeg+(totalDeg-startDeg)*progress;
+      const radius=180;
+      const radians=(currentDeg*Math.PI)/180;
+      const x=Math.cos(radians)*radius;
+      const y=Math.sin(radians)*radius;
+      ball.style.transform=`translate(${x}px,${y}px)`;
+      if (progress<1) requestAnimationFrame(animate);
     }
     requestAnimationFrame(animate);
   }
 
   function getSector(deg) {
-    if (deg >= 0 && deg < 60) return 'red';
-    if (deg >= 60 && deg < 120) return 'black';
-    if (deg >= 120 && deg < 180) return 'red';
-    if (deg >= 180 && deg < 240) return 'green';
-    if (deg >= 240 && deg < 300) return 'black';
+    if (deg>=0 && deg<60) return 'red';
+    if (deg>=60 && deg<120) return 'black';
+    if (deg>=120 && deg<180) return 'red';
+    if (deg>=180 && deg<240) return 'green';
+    if (deg>=240 && deg<300) return 'black';
     return 'red';
   }
 
   // -------- Coin Flip --------
   function flipCoin() {
     const betAmount = getBet();
-    if (betAmount === null) return;
-
-    const flipDuration = 600;
-    const coinDiv = document.getElementById('coin');
-    coinDiv.classList.add('flip');
-
-    setTimeout(() => {
-      const outcome = Math.random() > 0.5 ? 'Heads' : 'Tails';
-      coinDiv.innerText = outcome;
-    }, flipDuration/2);
-
-    setTimeout(() => {
-      coinDiv.classList.remove('flip');
-      const userChoice = prompt('Bet on Heads or Tails? (Type "Heads" or "Tails")', 'Heads');
-      if (!userChoice || (userChoice !== 'Heads' && userChoice !== 'Tails')) {
-        alert('Invalid choice, no bet placed.');
+    if (betAmount===null) return;
+    const coinDiv=document.getElementById('coin');
+    coinDiv.classList.remove('flip'); // reset
+    // Animate flip
+    setTimeout(()=>{ coinDiv.classList.add('flip'); }, 10);
+    setTimeout(()=>{
+      // Reveal answer after flip
+      const outcome=Math.random()>0.5?'Heads':'Tails';
+      coinDiv.innerText=outcome;
+    }, 400);
+    // Final result after flip
+    setTimeout(()=>{
+      const userChoice=prompt('Bet on Heads or Tails? (Type "Heads" or "Tails")', 'Heads');
+      if (!userChoice || (userChoice!=='Heads' && userChoice!=='Tails')) {
+        alert('Invalid choice.');
         return;
       }
-      if (userChoice === (coinDiv.innerText)) {
-        balance += betAmount;
-        resultDiv.innerText= `It's ${coinDiv.innerText}. You won $${betAmount}!`;
+      if (userChoice===coinDiv.innerText) {
+        balance+=betAmount;
+        resultDiv.innerText=`It's ${coinDiv.innerText}. You won $${betAmount}!`;
         winSound.play();
       } else {
-        balance -= betAmount;
-        resultDiv.innerText= `It's ${coinDiv.innerText}. You lost $${betAmount}.`;
+        balance-=betAmount;
+        resultDiv.innerText=`It's ${coinDiv.innerText}. You lost $${betAmount}.`;
         loseSound.play();
       }
       updateBalance();
-    }, flipDuration);
+    }, 800);
   }
 
   // -------- Slot Machine --------
-  const symbols = ['🍒','🍋','🍇','🔔','⭐','💎'];
-  let spinning = false;
-
+  const slotSymbols=['🍒','🍋','🍇','🔔','⭐','💎'];
+  let spinning=false;
   function spinSlot() {
     if (spinning) return;
-    const betAmount = getBet();
-    if (betAmount === null) return;
-
+    const betAmount=getBet();
+    if (betAmount===null) return;
     spinning=true;
     document.getElementById('spin-btn').disabled=true;
     spinSound.play();
 
-    const reels = [
+    const reels=[
       document.getElementById('reel1'),
       document.getElementById('reel2'),
       document.getElementById('reel3')
     ];
+    const maxSpins=[20,25,30];
 
-    const maxSpins = [20,25,30];
+    let results=[null,null,null];
+    let completed=0;
 
-    let results = [null, null, null];
-    let completedSpins = 0;
-
-    reels.forEach((reel, index) => {
+    reels.forEach((reel,idx)=>{
       let count=0;
-      const interval = setInterval(() => {
-        reel.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+      const interval=setInterval(()=>{
+        reel.innerText=slotSymbols[Math.floor(Math.random()*slotSymbols.length)];
         count++;
-        if (count >= maxSpins[index]) {
+        if (count>=maxSpins[idx]) {
           clearInterval(interval);
-          results[index]=symbols[Math.floor(Math.random() * symbols.length)];
-          completedSpins++;
-          if (completedSpins===3) {
-            if (results.every(s => s===results[0])) {
-              balance += betAmount*5;
+          results[idx]=slotSymbols[Math.floor(Math.random()*slotSymbols.length)];
+          completed++;
+          if (completed===3) {
+            if (results.every(s=>s===results[0])) {
+              balance+=betAmount*5;
               resultDiv.innerText=`🎉 Jackpot! You won $${betAmount*5}!`;
               winSound.play();
             } else {
-              balance -= betAmount;
+              balance-=betAmount;
               resultDiv.innerText=`Try again! You lost $${betAmount}.`;
               loseSound.play();
             }
@@ -430,9 +431,45 @@
     });
   }
 
+  // -------- Dice Roll --------
+  function rollDice() {
+    const betAmount=getBet();
+    if (betAmount===null) return;
+    const dice=Math.floor(Math.random()*6)+1;
+    document.getElementById('dice-result').innerText='🎲 '+dice;
+    if (dice>=4) { // simple win condition
+      balance+=betAmount;
+      resultDiv.innerText=`You rolled a ${dice}. You won $${betAmount}!`;
+      winSound.play();
+    } else {
+      balance-=betAmount;
+      resultDiv.innerText=`You rolled a ${dice}. You lost $${betAmount}.`;
+      loseSound.play();
+    }
+    updateBalance();
+  }
+
+  // -------- Blackjack (simplified) --------
+  function startBlackjack() {
+    // For demo, just a simple win/lose
+    const betAmount=getBet();
+    if (betAmount===null) return;
+    const outcome=Math.random()>0.5?'Win':'Lose';
+    if (outcome==='Win') {
+      balance+=betAmount;
+      resultDiv.innerText=`Blackjack! You won $${betAmount}!`;
+      winSound.play();
+    } else {
+      balance-=betAmount;
+      resultDiv.innerText=`Blackjack! You lost $${betAmount}.`;
+      loseSound.play();
+    }
+    updateBalance();
+  }
+
   // Initialize
   updateBalance();
-  showGame('roulette'); // default
+  showGame('roulette');
 </script>
 </body>
 </html>
