@@ -3,57 +3,144 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Fake Money Gambling Site</title>
+<title>Fake Money Roulette</title>
 <style>
   body {
-    font-family: Arial, sans-serif;
-    background-color: #2c3e50;
-    color: #ecf0f1;
+    font-family: 'Arial', sans-serif;
+    background-color: #1e1e1e;
+    color: #fff;
     text-align: center;
-    padding: 50px;
+    padding: 30px;
   }
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
   #balance {
     font-size: 24px;
     margin-bottom: 20px;
   }
+
+  .controls {
+    margin-bottom: 20px;
+  }
+
   input[type=number] {
     padding: 10px;
     font-size: 16px;
     width: 100px;
+    margin-right: 10px;
   }
+
   button {
     padding: 10px 20px;
+    margin: 5px;
     font-size: 16px;
-    margin: 10px;
     cursor: pointer;
+    background-color: #3498db;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
   }
+
+  button:hover {
+    background-color: #2980b9;
+  }
+
+  #roulette-container {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    margin: 0 auto 30px auto;
+  }
+
+  #roulette {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 10px solid #ecf0f1;
+    background: conic-gradient(
+      red 0deg 60deg,
+      black 60deg 120deg,
+      red 120deg 180deg,
+      green 180deg 240deg,
+      black 240deg 300deg,
+      red 300deg 360deg
+    );
+    position: relative;
+    transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+
+  #pointer {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; 
+    height: 0; 
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 20px solid #fff;
+    z-index: 10;
+  }
+
+  #ball {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    margin-top: -10px;
+    margin-left: -180px;
+    transition: all 4s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+
   #result {
-    margin-top: 20px;
     font-size: 20px;
+    margin-top: 20px;
+    min-height: 24px;
   }
 </style>
 </head>
 <body>
 
-<h1>Fake Money Casino</h1>
+<h1>Fake Money Roulette</h1>
 <div id="balance">Balance: $<span id="money">1000</span></div>
 
-<label for="betAmount">Bet Amount:</label>
-<input type="number" id="betAmount" min="1" max="1000" value="10" />
+<div class="controls">
+  <label for="betAmount">Bet Amount:</label>
+  <input type="number" id="betAmount" min="1" max="1000" value="10" />
+  <br/><br/>
+  <button onclick="placeBet('red')">Bet on Red</button>
+  <button onclick="placeBet('black')">Bet on Black</button>
+  <button onclick="placeBet('green')">Bet on Green</button>
+</div>
 
-<br/>
-
-<button onclick="placeBet('red')">Bet on Red</button>
-<button onclick="placeBet('black')">Bet on Black</button>
-<button onclick="placeBet('green')">Bet on Green</button>
+<div id="roulette-container">
+  <div id="pointer"></div>
+  <div id="roulette">
+    <div id="ball"></div>
+  </div>
+</div>
 
 <div id="result"></div>
 
 <script>
   let balance = 1000;
+  const roulette = document.getElementById('roulette');
+  const ball = document.getElementById('ball');
+  const resultDiv = document.getElementById('result');
 
   function updateBalance() {
     document.getElementById('money').innerText = balance;
+  }
+
+  function getRandomDegree() {
+    // Random degree between 0 and 360
+    return Math.floor(Math.random() * 360);
   }
 
   function placeBet(color) {
@@ -70,30 +157,63 @@
       return;
     }
 
-    // Spin the roulette
-    const outcomes = ['red', 'black', 'green'];
-    const spinResult = outcomes[Math.floor(Math.random() * outcomes.length)];
+    // Spin the wheel
+    const spinDegree = getRandomDegree() + 360 * 4; // 4 full spins for effect
+    roulette.style.transform = `rotate(${spinDegree}deg)`;
 
-    let resultText = '';
+    // Animate ball to move around the wheel
+    const totalDegrees = spinDegree % 360;
 
-    if (spinResult === color) {
+    // Position the ball based on the final angle
+    const radius = 180; // radius from center
+    const radians = (totalDegrees * Math.PI) / 180;
+    const x = Math.cos(radians) * radius;
+    const y = Math.sin(radians) * radius;
+
+    // Animate the ball to the new position after spin
+    setTimeout(() => {
+      ball.style.transform = `translate(${x}px, ${y}px)`;
+    }, 4000); // match transition duration
+
+    // Determine the result after spin completes
+    setTimeout(() => {
+      const outcomeSector = getSector(totalDegrees);
       let winnings = 0;
-      if (spinResult === 'green') {
-        winnings = betAmount * 14; // Green pays 14:1
-        balance += winnings;
-        resultText = `The ball landed on green! You won $${winnings}!`;
-      } else {
-        winnings = betAmount;
-        balance += winnings;
-        resultText = `The ball landed on ${spinResult}! You won $${winnings}!`;
-      }
-    } else {
-      balance -= betAmount;
-      resultText = `The ball landed on ${spinResult}. You lost $${betAmount}.`;
-    }
+      let message = '';
 
-    document.getElementById('result').innerText = resultText;
-    updateBalance();
+      if (outcomeSector === color) {
+        if (color === 'green') {
+          winnings = betAmount * 14; // Green pays 14:1
+          balance += winnings;
+          message = `Green! You won $${winnings}!`;
+        } else {
+          winnings = betAmount;
+          balance += winnings;
+          message = `It's ${color}! You won $${winnings}!`;
+        }
+      } else {
+        balance -= betAmount;
+        message = `It's ${outcomeSector}! You lost $${betAmount}.`;
+      }
+
+      resultDiv.innerText = message;
+      updateBalance();
+
+      // Reset ball position for next spin
+      ball.style.transform = `translate(0, 0)`;
+    }, 4200); // slightly longer than spin to sync
+  }
+
+  // Determine sector based on degree
+  function getSector(degree) {
+    // Define sectors: red, black, green
+    // 0-60: red, 60-120: black, 120-180: red, 180-240: green, 240-300: black, 300-360: red
+    if (degree >= 0 && degree < 60) return 'red';
+    if (degree >= 60 && degree < 120) return 'black';
+    if (degree >= 120 && degree < 180) return 'red';
+    if (degree >= 180 && degree < 240) return 'green';
+    if (degree >= 240 && degree < 300) return 'black';
+    return 'red';
   }
 
   // Initialize balance display
