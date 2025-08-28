@@ -3,117 +3,104 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Gus's Casino</title>
+<title>Gus's Casino - Fully Fixed & Beautiful</title>
+<!-- Loaders for cool animations -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/uiverse/loaders/dist/loaders.min.css" />
 <style>
   body {
     font-family: 'Arial', sans-serif;
-    background-color: #1e1e2f;
-    color: #ecf0f1;
+    background: linear-gradient(135deg, #2c3e50, #4ca1af);
+    color: #fff;
     margin: 0;
     padding: 20px;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   h1 {
     font-size: 3em;
     margin-bottom: 0.2em;
     color: #f39c12;
+    text-shadow: 2px 2px 4px #000;
   }
 
   #quote {
     font-style: italic;
     font-size: 1.2em;
     margin-bottom: 1em;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0 10px;
+    max-width: 700px;
+    text-align: center;
   }
 
   #balance {
-    font-size: 1.5em;
+    font-size: 2em;
     margin-bottom: 1em;
+    padding: 0 20px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
   }
 
-  /* Button styles */
+  /* Bet input styling */
+  .bet-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin: 1em 0;
+  }
+  #betAmount {
+    width: 80px;
+    padding: 8px;
+    font-size: 1em;
+    border-radius: 8px;
+    border: none;
+  }
+
+  /* Game buttons styling */
   .game-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
     margin-bottom: 2em;
   }
   button {
-    background: linear-gradient(to right, #f7971e, #ffd200);
+    background: linear-gradient(135deg, #f7971e, #ffd200);
     border: none;
-    padding: 12px 24px;
-    margin: 8px;
+    padding: 12px 20px;
+    border-radius: 10px;
     font-size: 1em;
-    border-radius: 8px;
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    transition: all 0.2s ease;
+    transition: all 0.2s;
   }
   button:hover {
     transform: scale(1.05);
-    background: linear-gradient(to right, #f2994a, #ffc107);
+    background: linear-gradient(135deg, #f2994a, #ffc107);
   }
 
+  /* Game area container */
   #game-area {
-    margin-top: 2em;
-  }
-
-  /* Roulette styles */
-  #roulette-container {
-    position: relative;
-    width: 400px;
-    height: 400px;
-    margin: 0 auto 2em auto;
-  }
-  #roulette {
     width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    border: 12px solid #fff;
-    background: conic-gradient(
-      #e74c3c 0deg 60deg,
-      #2c3e50 60deg 120deg,
-      #e74c3c 120deg 180deg,
-      #27ae60 180deg 240deg,
-      #2c3e50 240deg 300deg,
-      #e74c3c 300deg 360deg
-    );
-    position: relative;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  #pointer {
-    position: absolute;
-    top: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0; height: 0;
-    border-left: 20px solid transparent;
-    border-right: 20px solid transparent;
-    border-bottom: 20px solid #fff;
-    z-index: 10;
+  /* Loader containers for animations */
+  .loader-container {
+    margin: 1em 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
   }
 
-  #ball {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background-color: #fff;
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    margin-top: -200px; /* radius */
-    margin-left: -10px;
-    transform: translate(0, 0);
-    transition: none; /* No movement needed */
-  }
-
-  /* Fixed on red, no movement */
-  /* Coin flip styles */
+  /* Coin flip style */
   #coin {
     width: 200px;
     height: 200px;
-    margin: 0 auto;
     border-radius: 50%;
     border: 8px solid #fff;
     background: linear-gradient(135deg, #f1c40f, #f39c12);
@@ -124,9 +111,7 @@
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     transition: transform 0.8s ease;
-    perspective: 1000px;
   }
-
   #coin.flip {
     transform: rotateY(1800deg);
   }
@@ -134,15 +119,12 @@
   /* Slot machine styles */
   #slot-machine {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    gap: 15px;
     margin-top: 1em;
   }
-
   .reel {
     width: 80px;
     height: 80px;
-    margin: 0 10px;
     border: 4px solid #fff;
     border-radius: 8px;
     background-color: #34495e;
@@ -150,30 +132,35 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Arial', sans-serif;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    transition: all 0.2s;
   }
-
   #spin-btn {
     padding: 12px 24px;
-    font-size: 1.2em;
-    background: linear-gradient(to right, #f7971e, #ffd200);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
     margin-top: 1em;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  }
-  #spin-btn:hover {
-    transform: scale(1.05);
-    background: linear-gradient(to right, #f2994a, #ffc107);
+    font-size: 1.2em;
   }
 
-  /* Result display */
-  #result {
-    margin-top: 2em;
-    font-size: 1.3em;
-    min-height: 1.5em;
+  /* Dice display style */
+  #dice {
+    font-size: 8em;
+    margin: 1em 0;
   }
+
+  /* Result message style */
+#result {
+  margin-top: 2em;
+  font-size: 1.3em;
+  max-width: 700px;
+  padding: 0 20px;
+  text-align: center;
+  transition: opacity 0.5s ease, height 0.5s ease;
+}
+#result.hidden {
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}
 </style>
 </head>
 <body>
@@ -182,294 +169,209 @@
 <div id="quote">"99.9% of gamblers quit before their big win." - Gus</div>
 <div id="balance">Balance: $<span id="money">1000</span></div>
 
+<div class="bet-controls">
+  <label for="betAmount">Bet amount: $</label>
+  <input type="number" id="betAmount" min="1" value="10" />
+</div>
+
 <div class="game-buttons">
-  <button onclick="showGame('roulette')">Roulette</button>
   <button onclick="showGame('coin')">Coin Flip</button>
   <button onclick="showGame('slot')">Slot Machine</button>
   <button onclick="showGame('dice')">Dice Roll</button>
-  <button onclick="showGame('blackjack')">Blackjack</button>
 </div>
 
 <div id="game-area">
-
-  <!-- Roulette -->
-  <div id="roulette-area" style="display:none;">
-    <div id="roulette-container">
-      <div id="pointer"></div>
-      <div id="roulette">
-        <div id="ball"></div>
-      </div>
-    </div>
-    <button style="margin-top:20px;" onclick="spinRoulette()">Spin Roulette</button>
-  </div>
-
   <!-- Coin Flip -->
-  <div id="coin-area" style="display:none;">
+  <div id="coin" style="display:none;">
+    <div>
+      <p>Pick Heads or Tails:</p>
+      <button onclick="setCoinGuess('Heads')">Heads</button>
+      <button onclick="setCoinGuess('Tails')">Tails</button>
+    </div>
     <div id="coin" onclick="flipCoin()">Flip Coin</div>
+    <div id="coin-choice" style="margin-top:1em;">Your choice: <span id="coin-choice-text">None</span></div>
+    <div class="loader-container" id="coin-loader" style="display:none;">
+      <div class="loader loader-ellipsis"></div>
+    </div>
   </div>
-
   <!-- Slot Machine -->
-  <div id="slot-area" style="display:none;">
+  <div id="slot" style="display:none;">
     <div id="slot-machine">
       <div class="reel" id="reel1">🍒</div>
       <div class="reel" id="reel2">🍋</div>
       <div class="reel" id="reel3">🍇</div>
     </div>
     <button id="spin-btn" onclick="spinSlot()">Spin Slots</button>
+    <div class="loader-container" id="slot-loader" style="display:none;">
+      <div class="loader loader-ellipsis"></div>
+    </div>
   </div>
-
-  <!-- Dice Roll -->
-  <div id="dice-area" style="display:none;">
+  <!-- Dice -->
+  <div id="dice" style="display:none;">
+    <p>Guess a number (1-6):</p>
+    <input type="number" id="dice-guess" min="1" max="6" value="1" />
     <button onclick="rollDice()">Roll Dice</button>
-    <div id="dice-result" style="margin-top:1em; font-size:2em;"></div>
+    <div id="dice-result" style="margin-top:1em;">🎲</div>
+    <div class="loader-container" id="dice-loader" style="display:none;">
+      <div class="loader loader-ellipsis"></div>
+    </div>
   </div>
-
-  <!-- Blackjack -->
-  <div id="blackjack-area" style="display:none;">
-    <button onclick="startBlackjack()">Start Blackjack</button>
-    <div id="blackjack-game" style="margin-top:1em;"></div>
-  </div>
-
 </div>
 
 <div id="result"></div>
 
-<!-- Sounds -->
-<audio id="spinSound" src="https://www.soundjay.com/misc/sounds/slot-machine-1.mp3" preload="auto"></audio>
-<audio id="winSound" src="https://www.soundjay.com/misc/sounds/coin-1.wav" preload="auto"></audio>
-<audio id="loseSound" src="https://www.soundjay.com/misc/sounds/lose-1.wav" preload="auto"></audio>
-
+<script src="https://cdn.jsdelivr.net/gh/uiverse/loaders/dist/loaders.min.js"></script>
 <script>
-  let balance = 1000;
-  const moneySpan = document.getElementById('money');
-  const resultDiv = document.getElementById('result');
+  let balance=1000;
+  let coinGuess=null;
 
-  const roulette = document.getElementById('roulette');
-  const ball = document.getElementById('ball');
+  const balanceSpan=document.getElementById('money');
+  const resultDiv=document.getElementById('result');
 
-  const spinSound = document.getElementById('spinSound');
-  const winSound = document.getElementById('winSound');
-  const loseSound = document.getElementById('loseSound');
-
-  let currentGame = 'roulette';
-
-  function showGame(game) {
-    document.querySelectorAll('#game-area > div').forEach(div => div.style.display='none');
-    document.getElementById(game + '-area').style.display='block';
-    currentGame=game;
+  function showGame(g){
+    document.querySelectorAll('#game-area > div').forEach(d=>d.style.display='none');
+    document.getElementById(g).style.display='block';
     resetResults();
   }
 
-  function resetResults() {
-    document.querySelector('#dice-result').innerText='';
-    document.getElementById('blackjack-game') && (document.getElementById('blackjack-game').innerHTML='');
-    document.getElementById('result').innerText='';
+  function resetResults(){
+    const res=document.getElementById('result');
+    res.innerText='';
+    res.classList.remove('hidden');
   }
 
-  function updateBalance() {
-    moneySpan.innerText = balance;
+  function updateBalance(){
+    document.getElementById('money').innerText=balance;
   }
 
-  function getBet() {
-    const betStr = prompt("Enter your bet amount:", "10");
-    const bet = parseInt(betStr);
-    if (isNaN(bet) || bet <= 0 || bet > balance) {
-      alert('Invalid bet.');
-      return null;
-    }
-    return bet;
-  }
-
-  // -------- Roulette ----------
-  function spinRoulette() {
-    const betAmount = 10; // fixed for demo
-    if (betAmount > balance) {
-      alert('Not enough funds!');
-      return;
-    }
-    // Bet on red always
-    const betColor='red';
-
-    // Spin wheel
-    const spins = Math.floor(Math.random() * 3 + 3);
-    const spinDeg = Math.floor(Math.random() * 360);
-    const totalDeg = 360 * spins + spinDeg;
-    roulette.style.transition='transform 4s cubic-bezier(0.33, 1, 0.68, 1)';
-    roulette.style.transform=`rotate(${totalDeg}deg)`;
-
-    // Animate ball (fixed position)
-    animateBall(spinDeg, totalDeg);
-
-    setTimeout(() => {
-      const finalDeg=totalDeg%360;
-      const sector=getSector(finalDeg);
-      let win=false;
-      let payout=0;
-      if (sector===betColor) {
-        win=true;
-        payout=20;
-      }
-      if (win) {
-        balance+=payout - betAmount;
-        resultDiv.innerText=`Landed on ${sector}. You won $${payout}!`;
-        winSound.play();
-      } else {
-        balance-=betAmount;
-        resultDiv.innerText=`Landed on ${sector}. You lost $${betAmount}.`;
-        loseSound.play();
-      }
-      updateBalance();
-    }, 4200);
-  }
-
-  function animateBall(startDeg, totalDeg) {
-    const duration=4000;
-    const startTime=performance.now();
-
-    function animate(currentTime) {
-      const elapsed=currentTime-startTime;
-      const progress=Math.min(elapsed/duration,1);
-      const currentDeg=startDeg+(totalDeg-startDeg)*progress;
-      const radius=180;
-      const radians=(currentDeg*Math.PI)/180;
-      const x=Math.cos(radians)*radius;
-      const y=Math.sin(radians)*radius;
-      ball.style.transform=`translate(${x}px,${y}px)`;
-      if (progress<1) requestAnimationFrame(animate);
-    }
-    requestAnimationFrame(animate);
-  }
-
-  function getSector(deg) {
-    if (deg>=0 && deg<60) return 'red';
-    if (deg>=60 && deg<120) return 'black';
-    if (deg>=120 && deg<180) return 'red';
-    if (deg>=180 && deg<240) return 'green';
-    if (deg>=240 && deg<300) return 'black';
-    return 'red';
+  function setCoinGuess(choice){
+    coinGuess=choice;
+    document.getElementById('coin-choice-text').innerText=choice;
   }
 
   // -------- Coin Flip --------
   function flipCoin() {
-    const betAmount = getBet();
-    if (betAmount===null) return;
+    if(!coinGuess){
+      alert('Pick Heads or Tails.');
+      return;
+    }
+    const bet=parseInt(document.getElementById('betAmount').value);
+    if(bet>balance){ alert('Not enough funds'); return; }
+
+    // Show loader
+    document.getElementById('coin-loader').style.display='flex';
+
     const coinDiv=document.getElementById('coin');
-    coinDiv.classList.remove('flip'); // reset
-    // Animate flip
-    setTimeout(()=>{ coinDiv.classList.add('flip'); }, 10);
+    coinDiv.classList.remove('flip');
+    setTimeout(()=>{ coinDiv.classList.add('flip'); },10);
     setTimeout(()=>{
-      // Reveal answer after flip
       const outcome=Math.random()>0.5?'Heads':'Tails';
       coinDiv.innerText=outcome;
-    }, 400);
-    // Final result after flip
+    },400);
     setTimeout(()=>{
-      const userChoice=prompt('Bet on Heads or Tails? (Type "Heads" or "Tails")', 'Heads');
-      if (!userChoice || (userChoice!=='Heads' && userChoice!=='Tails')) {
-        alert('Invalid choice.');
-        return;
-      }
-      if (userChoice===coinDiv.innerText) {
-        balance+=betAmount;
-        resultDiv.innerText=`It's ${coinDiv.innerText}. You won $${betAmount}!`;
-        winSound.play();
-      } else {
-        balance-=betAmount;
-        resultDiv.innerText=`It's ${coinDiv.innerText}. You lost $${betAmount}.`;
-        loseSound.play();
+      document.getElementById('coin-loader').style.display='none';
+      if(coinGuess===coinDiv.innerText){
+        balance+=10;
+        showResult(`It's ${coinDiv.innerText}. You won $10!`);
+      }else{
+        balance-=10;
+        showResult(`It's ${coinDiv.innerText}. You lost $10.`);
       }
       updateBalance();
-    }, 800);
+      coinGuess=null;
+    },800);
   }
 
   // -------- Slot Machine --------
-  const slotSymbols=['🍒','🍋','🍇','🔔','⭐','💎'];
+  const symbols=['🍒','🍋','🍇','🔔','⭐','💎'];
   let spinning=false;
+
   function spinSlot() {
-    if (spinning) return;
-    const betAmount=getBet();
-    if (betAmount===null) return;
+    if(spinning){ alert('Already spinning!'); return; }
+    const bet=parseInt(document.getElementById('betAmount').value);
+    if(bet>balance){ alert('Not enough funds'); return; }
     spinning=true;
+    document.getElementById('slot-loader').style.display='flex';
     document.getElementById('spin-btn').disabled=true;
-    spinSound.play();
 
-    const reels=[
-      document.getElementById('reel1'),
-      document.getElementById('reel2'),
-      document.getElementById('reel3')
-    ];
-    const maxSpins=[20,25,30];
+    const reels=["reel1","reel2","reel3"];
+    const finalResults=[];
 
-    let results=[null,null,null];
-    let completed=0;
+    // Animate: rapid change for each reel
+    const intervals=[];
+    for(let i=0;i<3;i++){
+      intervals[i]=setInterval(()=>{
+        document.getElementById(reels[i]).innerText=symbols[Math.floor(Math.random()*symbols.length)];
+      },50);
+    }
 
-    reels.forEach((reel,idx)=>{
-      let count=0;
-      const interval=setInterval(()=>{
-        reel.innerText=slotSymbols[Math.floor(Math.random()*slotSymbols.length)];
-        count++;
-        if (count>=maxSpins[idx]) {
-          clearInterval(interval);
-          results[idx]=slotSymbols[Math.floor(Math.random()*slotSymbols.length)];
-          completed++;
-          if (completed===3) {
-            if (results.every(s=>s===results[0])) {
-              balance+=betAmount*5;
-              resultDiv.innerText=`🎉 Jackpot! You won $${betAmount*5}!`;
-              winSound.play();
-            } else {
-              balance-=betAmount;
-              resultDiv.innerText=`Try again! You lost $${betAmount}.`;
-              loseSound.play();
-            }
-            updateBalance();
-            document.getElementById('spin-btn').disabled=false;
-            spinning=false;
-          }
-        }
-      }, 100);
-    });
+    // Stop after 1.5 seconds
+    setTimeout(()=>{
+      for(let i=0;i<3;i++) clearInterval(intervals[i]);
+      // Assign final symbols
+      for(let i=0;i<3;i++){
+        finalResults[i]=symbols[Math.floor(Math.random()*symbols.length)];
+        document.getElementById(reels[i]).innerText=finalResults[i];
+      }
+
+      // Check for jackpot
+      if(finalResults[0]===finalResults[1] && finalResults[1]===finalResults[2]){
+        balance+=bet*5;
+        showResult('🎉 Jackpot! You won $'+(bet*5)+'!');
+      }else{
+        balance-=bet;
+        showResult('Try again! You lost $'+bet+'.');
+      }
+      updateBalance();
+      document.getElementById('slot-loader').style.display='none';
+      document.getElementById('spin-btn').disabled=false;
+      spinning=false;
+    },1500);
   }
 
-  // -------- Dice Roll --------
+  // -------- Dice --------
   function rollDice() {
-    const betAmount=getBet();
-    if (betAmount===null) return;
-    const dice=Math.floor(Math.random()*6)+1;
-    document.getElementById('dice-result').innerText='🎲 '+dice;
-    if (dice>=4) { // simple win condition
-      balance+=betAmount;
-      resultDiv.innerText=`You rolled a ${dice}. You won $${betAmount}!`;
-      winSound.play();
-    } else {
-      balance-=betAmount;
-      resultDiv.innerText=`You rolled a ${dice}. You lost $${betAmount}.`;
-      loseSound.play();
+    const guess=parseInt(document.getElementById('dice-guess').value);
+    if(guess<1 || guess>6 || isNaN(guess)){
+      alert('Pick 1-6');
+      return;
     }
-    updateBalance();
+    const bet=parseInt(document.getElementById('betAmount').value);
+    if(bet>balance){ alert('Not enough funds'); return; }
+
+    // Show loader
+    const diceDiv=document.getElementById('dice');
+    diceDiv.innerText='🎲 rolling...';
+    diceDiv.style.opacity=0;
+    document.getElementById('dice-loader').style.display='flex';
+
+    setTimeout(()=>{
+      document.getElementById('dice-loader').style.display='none';
+      const roll=Math.floor(Math.random()*6)+1;
+      diceDiv.innerText='🎲 '+roll;
+      if(roll===guess){
+        balance+=15;
+        showResult('You guessed '+guess+'. You won $15!');
+      }else{
+        balance-=10;
+        showResult('You guessed '+guess+'. You lost $10.');
+      }
+      diceDiv.style.opacity=1;
+      updateBalance();
+    },1500);
   }
 
-  // -------- Blackjack (simplified) --------
-  function startBlackjack() {
-    // For demo, just a simple win/lose
-    const betAmount=getBet();
-    if (betAmount===null) return;
-    const outcome=Math.random()>0.5?'Win':'Lose';
-    if (outcome==='Win') {
-      balance+=betAmount;
-      resultDiv.innerText=`Blackjack! You won $${betAmount}!`;
-      winSound.play();
-    } else {
-      balance-=betAmount;
-      resultDiv.innerText=`Blackjack! You lost $${betAmount}.`;
-      loseSound.play();
-    }
-    updateBalance();
+  // -------- Show message that disappears after 4 sec --------
+  function showResult(msg){
+    const res=document.getElementById('result');
+    res.innerText=msg;
+    res.classList.remove('hidden');
+    setTimeout(()=>{ res.classList.add('hidden'); },4000);
   }
 
-  // Initialize
+  // -------- Initialize --------
   updateBalance();
-  showGame('roulette');
+  showGame('coin');
 </script>
 </body>
 </html>
